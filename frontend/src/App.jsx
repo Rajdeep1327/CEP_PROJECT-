@@ -29,7 +29,7 @@ import {
 import './App.css'
 
 // Backend endpoint for the feedback form (FastAPI running locally)
-const FEEDBACK_API_URL = 'http://127.0.0.1:8000/api/feedback'
+const FEEDBACK_API_URL = 'https://citysurvival-pune-api.onrender.com/api/feedback';
 
 // Supported Pune Neighbourhoods
 const PUNE_AREAS = [
@@ -260,9 +260,11 @@ const PUNE_LISTINGS = [
     price: '₹15 - ₹25',
     priceNote: 'Pass valid on non-AC buses',
     description: 'Essential student lifeline linking Kothrud college hostels to Deccan and Pune Central Railway Station. High peak frequency.',
-    verified: true,
-    verificationLabel: 'Community Verified',
-    lastUpdated: 'Updated 3 days ago',
+
+    verified: false,
+    verificationLabel: 'Community Submission — Unverified',
+    lastUpdated: 'Last updated: Not confirmed',
+
     tags: ['Direct College Link', 'High Frequency', 'Pass Valid']
   },
 
