@@ -549,6 +549,38 @@ const PUNE_LISTINGS = [
   }
 ]
 
+// Safely construct targeted Google Maps search queries for Stay and Food
+const getMapSearchQuery = (category, area) => {
+  const areaName = area === 'All' ? 'Pune, Maharashtra' : `${area}, Pune`
+  if (category === 'Stay') {
+    return area === 'All'
+      ? 'student hostels PGs rooms in Pune, Maharashtra'
+      : `hostels PGs student rooms in ${areaName}`
+  }
+  if (category === 'Food') {
+    return area === 'All'
+      ? 'affordable student messes tiffin services budget food thali in Pune, Maharashtra'
+      : `student mess tiffin service thali budget food in ${areaName}`
+  }
+  return areaName
+}
+
+// Build iframe-based Google Maps embed URL safely
+const getMapEmbedUrl = (category, area) => {
+  const query = getMapSearchQuery(category, area)
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  if (apiKey) {
+    return `https://www.google.com/maps/embed/v1/search?key=${encodeURIComponent(apiKey)}&q=${encodeURIComponent(query)}`
+  }
+  return `https://maps.google.com/maps?q=${encodeURIComponent(query)}&t=&z=14&ie=UTF8&iwloc=&output=embed`
+}
+
+// Full Google Maps link for directions & larger view
+const getExternalMapUrl = (category, area) => {
+  const query = getMapSearchQuery(category, area)
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+}
+
 export default function App() {
   // Navigation & Category States
   const [activeCategory, setActiveCategory] = useState('All') // 'All' | 'Stay' | 'Food' | 'Transport'
@@ -1496,6 +1528,146 @@ export default function App() {
               Transparent verification: Look for the Community Verified tag on verified student hubs.
             </span>
           </div>
+
+          {/* Stay Map: Embedded Google Maps for Hostels, PGs & Rooms */}
+          {activeCategory === 'Stay' && (
+            <div className="category-map-card stay-map-card">
+              <div className="map-card-header">
+                <div className="map-card-heading-group">
+                  <div className="map-icon-badge">
+                    <Home size={20} />
+                  </div>
+                  <div>
+                    <h3 className="map-card-title">Explore Stays Nearby</h3>
+                    <p className="map-card-subtitle">
+                      Hostels, PGs, and student rooms in{' '}
+                      <span className="map-area-highlight">
+                        {selectedArea === 'All' ? 'Greater Pune' : selectedArea}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="map-actions-group">
+                  <a
+                    href={getExternalMapUrl('Stay', selectedArea)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-open-maps"
+                    title="Open in Google Maps"
+                  >
+                    <span>Open in Google Maps</span>
+                    <ExternalLink size={13} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Area Quick Switcher */}
+              <div className="map-area-chips">
+                <span className="map-chip-label">Filter Area:</span>
+                {PUNE_AREAS.map((area) => (
+                  <button
+                    key={`stay-area-${area.id}`}
+                    type="button"
+                    className={`map-area-chip ${selectedArea === area.id ? 'is-active' : ''}`}
+                    onClick={() => setSelectedArea(area.id)}
+                  >
+                    {area.name}
+                  </button>
+                ))}
+              </div>
+
+              {/* Responsive Google Maps Iframe */}
+              <div className="map-iframe-container">
+                <iframe
+                  key={`stay-map-${selectedArea}`}
+                  src={getMapEmbedUrl('Stay', selectedArea)}
+                  title={`Google Maps - Student Hostels, PGs and Rooms in ${selectedArea === 'All' ? 'Pune' : selectedArea}`}
+                  className="embedded-map-iframe"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+
+              {/* Disclaimer Notice */}
+              <div className="map-disclaimer">
+                <Info size={14} className="map-disclaimer-icon" />
+                <span>
+                  <strong>Location Exploration:</strong> Live map search provided by Google Maps for spatial reference. Places and listings shown on Google Maps have not been independently verified or audited by CitySurvival.
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Food Map: Embedded Google Maps for Messes, Tiffins & Budget Food */}
+          {activeCategory === 'Food' && (
+            <div className="category-map-card food-map-card">
+              <div className="map-card-header">
+                <div className="map-card-heading-group">
+                  <div className="map-icon-badge">
+                    <Utensils size={20} />
+                  </div>
+                  <div>
+                    <h3 className="map-card-title">Find Affordable Food Nearby</h3>
+                    <p className="map-card-subtitle">
+                      Student messes, tiffin services, and budget food in{' '}
+                      <span className="map-area-highlight">
+                        {selectedArea === 'All' ? 'Greater Pune' : selectedArea}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="map-actions-group">
+                  <a
+                    href={getExternalMapUrl('Food', selectedArea)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-open-maps"
+                    title="Open in Google Maps"
+                  >
+                    <span>Open in Google Maps</span>
+                    <ExternalLink size={13} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Area Quick Switcher */}
+              <div className="map-area-chips">
+                <span className="map-chip-label">Filter Area:</span>
+                {PUNE_AREAS.map((area) => (
+                  <button
+                    key={`food-area-${area.id}`}
+                    type="button"
+                    className={`map-area-chip ${selectedArea === area.id ? 'is-active' : ''}`}
+                    onClick={() => setSelectedArea(area.id)}
+                  >
+                    {area.name}
+                  </button>
+                ))}
+              </div>
+
+              {/* Responsive Google Maps Iframe */}
+              <div className="map-iframe-container">
+                <iframe
+                  key={`food-map-${selectedArea}`}
+                  src={getMapEmbedUrl('Food', selectedArea)}
+                  title={`Google Maps - Student Messes, Tiffins and Budget Food in ${selectedArea === 'All' ? 'Pune' : selectedArea}`}
+                  className="embedded-map-iframe"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+
+              {/* Disclaimer Notice */}
+              <div className="map-disclaimer">
+                <Info size={14} className="map-disclaimer-icon" />
+                <span>
+                  <strong>Location Exploration:</strong> Live map search provided by Google Maps for spatial reference. Places and listings shown on Google Maps have not been independently verified or audited by CitySurvival.
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Listings Cards Grid */}
           {filteredListings.length > 0 ? (
