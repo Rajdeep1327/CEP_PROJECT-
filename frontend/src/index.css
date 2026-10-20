@@ -1,0 +1,88 @@
+:root {
+  --bg-page: #080D14;
+  --bg-panel: #101A29;
+  --bg-card: #121F30;
+  --bg-card-hover: #16263b;
+  --border-subtle: #1e2d42;
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(32, 214, 194, 0.45);
+  
+  --accent-teal: #20D6C2;
+  --accent-teal-bright: #20D6C2;
+  --accent-secondary: #75E0BD;
+  --accent-teal-glow: rgba(32, 214, 194, 0.2);
+  --accent-teal-soft: rgba(32, 214, 194, 0.1);
+  
+  --text-primary: #F5F7FA;
+  --text-secondary: #A2ADBC;
+  --text-muted: #64748b;
+  
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+  
+  font-family: var(--font-main);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-primary);
+  background-color: var(--bg-page);
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-page);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080D14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2d42;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #20D6C2;
+}
+
+::selection {
+  background-color: rgba(32, 214, 194, 0.35);
+  color: #ffffff;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
